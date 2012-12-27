@@ -2,7 +2,7 @@
 ##############################################################################
 #
 #    hr_holidays_timebank module for OpenERP, Let to tranfer allocation to an other allocation
-#    Copyright (C) 2012 SYLEAM Info Services (<http://www.syleam.fr/>) 
+#    Copyright (C) 2012 SYLEAM Info Services (<http://www.syleam.fr/>)
 #              Sebastien LANGE <sebastien.lange@syleam.fr>
 #
 #    This file is a part of hr_holidays_timebank
@@ -25,19 +25,22 @@
 {
     'name': 'Hr Holidays Timebank',
     'version': '1.0',
-    'category': 'Custom',
+    'category': "Human Resources",
+    'complexity': "easy",
     'description': """Let to tranfer allocation to an other allocation""",
     'author': 'SYLEAM',
     'website': 'http://www.syleam.fr/',
-    'depends': [],
+    'depends': [
+        'base',
+        'hr_holidays',
+    ],
     'init_xml': [],
     'images': [],
     'update_xml': [
-        #'security/groups.xml',
-        #'security/ir.model.access.csv',
-        #'view/menu.xml',
-        #'wizard/wizard.xml',
-        #'report/report.xml',
+        'security/ir.model.access.csv',
+        'security/ir_rule.xml',
+        'hr_holidays_view.xml',
+        'hr_holidays_workflow.xml',
     ],
     'demo_xml': [],
     'test': [],

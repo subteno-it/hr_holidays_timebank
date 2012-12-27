@@ -1,0 +1,150 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        ##############################################################################
+        #
+        #    hr_holidays_timebank module for OpenERP, Let to tranfer allocation to an other allocation
+        #    Copyright (C) 2012 SYLEAM Info Services ([http://www.syleam.fr/]) 
+        #              Sebastien LANGE [sebastien.lange@syleam.fr]
+        #
+        #    This file is a part of hr_holidays_timebank
+        #
+        #    hr_holidays_timebank is free software: you can redistribute it and/or modify
+        #    it under the terms of the GNU Affero General Public License as published by
+        #    the Free Software Foundation, either version 3 of the License, or
+        #    (at your option) any later version.
+        #
+        #    hr_holidays_timebank is distributed in the hope that it will be useful,
+        #    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        #    GNU Affero General Public License for more details.
+        #
+        #    You should have received a copy of the GNU Affero General Public License
+        #    along with this program.  If not, see [http://www.gnu.org/licenses/].
+        #
+        ##############################################################################
+
+        <record id="view_hr_holidays_timebank_tree" model="ir.ui.view">
+            <field name="name">hr.holidays.timebank.tree</field>
+            <field name="model">hr.holidays.timebank</field>
+            <field name="type">tree</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <tree string="Transfer Leave" colors="red:state == 'refuse';blue:state == 'draft';black:state in ('confirm','validate','validate1')">
+                    <field name="name"/>
+                    <field name="employee_id"/>
+                    <field name="holiday_status_id"/>
+                    <field name="holiday_status_to_id"/>
+                    <field name="number_of_days_temp"/>
+                    <field name="state"/>
+                </tree>
+            </field>
+        </record>
+
+        <record id="view_hr_holidays_timebank_form" model="ir.ui.view">
+            <field name="name">hr.holidays.timebank.form</field>
+            <field name="model">hr.holidays.timebank</field>
+            <field name="type">form</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <form string="Transfer Leave">
+                    <group col="8" colspan="4">
+                        <field name="name"/>
+                        <field name="holiday_type" invisible="1"/>
+                        <field name="employee_id" required="1"/>
+                    </group>
+                    <notebook colspan="4">
+                        <page string="General">
+                            <field name="holiday_status_id" string="Leave Type (From)" on_change="onchange_sec_id(holiday_status_id)" context="{'employee_id':employee_id}"/>
+                            <field name="holiday_status_to_id"/>
+                            <field name="number_of_days_temp"/>
+                            <field name="double_validation" invisible="1"/>
+                            <newline/>
+                            <field name="manager_id"/>
+                            <field name="manager_id2" attrs="{'invisible':[('double_validation', '!=', True)]}"/>
+                            <separator string="Reasons" colspan="4"/>
+                            <field name="notes" nolabel="1" colspan="4"/>
+                            <newline/>
+                            <field name="state" widget="statusbar" statusbar_visible="draft,confirm,validate" statusbar_colors='{"confirm":"blue","validate1":"blue","refuse":"red"}' colspan="2"/>
+                            <group colspan="2" col="6">
+                                <button string="Refuse" name="refuse" states="confirm,validate1" type="workflow" icon="gtk-no" groups="base.group_hr_user"/>
+                                <button string="Confirm" name="confirm" states="draft" type="workflow" icon="gtk-yes"/>
+                                <button string="Approve" name="validate" states="confirm" type="workflow" icon="gtk-apply" groups="base.group_hr_user"/>
+                                <button string="Approved" name="second_validate" states="validate1" type="workflow" icon="gtk-apply" groups="base.group_hr_user"/>
+                                <button string="Set to Draft" name="set_to_draft" states="cancel,validate,refuse" type="object" icon="gtk-convert" groups="base.group_hr_user"/>
+                            </group>
+                        </page>
+                    </notebook>
+                </form>
+            </field>
+        </record>
+
+        <record id="view_hr_holidays_timebank_search" model="ir.ui.view">
+            <field name="name">hr.holidays.timebank.search</field>
+            <field name="model">hr.holidays.timebank</field>
+            <field name="type">search</field>
+            <field name="priority" eval="8"/>
+            <field name="arch" type="xml">
+                <search string="Transfer Leave">
+                    <group>
+                        <filter icon="terp-check" domain="[('state','=','draft')]" string="To Confirm"/>
+                        <filter icon="terp-camera_test" domain="[('state','=','confirm')]" string="To Approve" name="approve"/>
+                        <filter icon="terp-camera_test" domain="[('state','=','validate')]" string="Validated" name="validated"/>
+                        <separator orientation="vertical"/>
+                        <field name="employee_id">
+                            <filter icon="terp-personal" name="my_leaves" domain="[('employee_id.user_id','=', uid)]" help="My Leaves"/>
+                        </field>
+                    </group>
+                    <newline/>
+                    <group expand="0" string="Group By...">
+                        <filter name="group_employee" string="Employee" icon="terp-personal" domain="[]" context="{'group_by':'employee_id'}"/>
+                        <separator orientation="vertical"/>
+                        <filter name="group_type" string="Type" icon="terp-stock_symbol-selection" domain="[]" context="{'group_by':'holiday_status_id'}"/>
+                        <separator orientation="vertical"/>
+                        <filter string="State" icon="terp-stock_effects-object-colorize" domain="[]" context="{'group_by':'state'}"/>
+                    </group>
+                </search>
+            </field>
+        </record>
+
+        <record model="ir.actions.act_window" id="act_open_hr_holidays_timebank_view">
+            <field name="name">Transfer Leave</field>
+            <field name="type">ir.actions.act_window</field>
+            <field name="res_model">hr.holidays.timebank</field>
+            <field name="view_type">form</field>
+            <field name="view_mode">tree,form</field>
+            <field name="search_view_id" ref="view_hr_holidays_timebank_search"/>
+            <field name="domain">[]</field>
+            <field name="context">{}</field>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_hr_holidays_timebank_view_form">
+            <field name="act_window_id" ref="act_open_hr_holidays_timebank_view"/>
+            <field name="sequence" eval="20"/>
+            <field name="view_mode">form</field>
+            <field name="view_id" ref="view_hr_holidays_timebank_form"/>
+        </record>
+
+        <record model="ir.actions.act_window.view" id="act_open_hr_holidays_timebank_view_tree">
+            <field name="act_window_id" ref="act_open_hr_holidays_timebank_view"/>
+            <field name="sequence" eval="10"/>
+            <field name="view_mode">tree</field>
+            <field name="view_id" ref="view_hr_holidays_timebank_tree"/>
+        </record>
+
+        <menuitem id="menu_hr_holidays_timebank"
+            parent="hr_holidays.menu_open_ask_holidays"
+            sequence="20"
+            action="act_open_hr_holidays_timebank_view"/>
+
+        <record model="ir.actions.act_window" id="hr_holidays.open_ask_holidays">
+            <field name="domain">[('type','=','remove'), ('timebank', '=', False)]</field>
+        </record>
+        <record model="ir.actions.act_window" id="hr_holidays.request_approve_holidays">
+            <field name="domain">[('type','=','remove'), ('timebank', '=', False)]</field>
+        </record>
+        <record model="ir.actions.act_window" id="hr_holidays.open_allocation_holidays">
+            <field name="domain">[('type','=','add'), ('timebank', '=', False)]</field>
+        </record>
+    </data>
+</openerp>

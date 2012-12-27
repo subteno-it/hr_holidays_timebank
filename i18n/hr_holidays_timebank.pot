@@ -1,0 +1,150 @@
+# Translation of OpenERP Server.
+# This file contains the translation of the following modules:
+#	* hr_holidays_timebank
+#
+msgid ""
+msgstr ""
+"Project-Id-Version: OpenERP Server 6.1\n"
+"Report-Msgid-Bugs-To: \n"
+"POT-Creation-Date: 2012-12-27 14:02+0000\n"
+"PO-Revision-Date: 2012-12-27 14:02+0000\n"
+"Last-Translator: <>\n"
+"Language-Team: \n"
+"MIME-Version: 1.0\n"
+"Content-Type: text/plain; charset=UTF-8\n"
+"Content-Transfer-Encoding: \n"
+"Plural-Forms: \n"
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "Confirm"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: sql_constraint:hr.holidays:0
+msgid "The start date must be before the end date !"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: help:hr.holidays,timebank:0
+#: view:hr.holidays.timebank:0
+#: model:ir.actions.act_window,name:hr_holidays_timebank.act_open_hr_holidays_timebank_view
+#: model:ir.ui.menu,name:hr_holidays_timebank.menu_hr_holidays_timebank
+msgid "Transfer Leave"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "Group By..."
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "State"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "My Leaves"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "Employee"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: field:hr.holidays,timebank:0
+msgid "Timebank"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "Type"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "Leave Type (From)"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "Set to Draft"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: field:hr.holidays.timebank,holiday_status_to_id:0
+msgid "Leave Type (To)"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "Approved"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: sql_constraint:hr.holidays:0
+msgid "You have to select an employee or a category"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "Refuse"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: field:hr.holidays.timebank,hr_holidays_id:0
+msgid "Holidays (From)"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: sql_constraint:hr.holidays:0
+msgid "The number of days must be greater than 0 !"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: model:ir.model,name:hr_holidays_timebank.model_hr_holidays
+msgid "Leave"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "Approve"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "Reasons"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: model:ir.model,name:hr_holidays_timebank.model_hr_holidays_timebank
+msgid "HR Holidays Timebank"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "General"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: field:hr.holidays.timebank,hr_holidays_to_id:0
+msgid "Holidays (To)"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "To Confirm"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "To Approve"
+msgstr ""
+
+#. module: hr_holidays_timebank
+#: view:hr.holidays.timebank:0
+msgid "Validated"
+msgstr ""
+

@@ -1,0 +1,119 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<openerp>
+    <data>
+        ##############################################################################
+        #
+        #    hr_holidays_timebank module for OpenERP, Let to tranfer allocation to an other allocation
+        #    Copyright (C) 2012 SYLEAM Info Services ([http://www.syleam.fr/]) 
+        #              Sebastien LANGE [sebastien.lange@syleam.fr]
+        #
+        #    This file is a part of hr_holidays_timebank
+        #
+        #    hr_holidays_timebank is free software: you can redistribute it and/or modify
+        #    it under the terms of the GNU Affero General Public License as published by
+        #    the Free Software Foundation, either version 3 of the License, or
+        #    (at your option) any later version.
+        #
+        #    hr_holidays_timebank is distributed in the hope that it will be useful,
+        #    but WITHOUT ANY WARRANTY; without even the implied warranty of
+        #    MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE.  See the
+        #    GNU Affero General Public License for more details.
+        #
+        #    You should have received a copy of the GNU Affero General Public License
+        #    along with this program.  If not, see [http://www.gnu.org/licenses/].
+        #
+        ##############################################################################
+
+        <!-- Workflow definition -->
+
+        <record model="workflow" id="wkf_holidays_timebank">
+            <field name="name">hr.wkf.holidays.timebank</field>
+            <field name="osv">hr.holidays.timebank</field>
+            <field name="on_create">True</field>
+        </record>
+
+        <record model="workflow.activity" id="act_draft">
+            <field name="wkf_id" ref="wkf_holidays_timebank" />
+            <field name="flow_start">True</field>
+            <field name="name">draft</field>
+        </record>
+
+        <record model="workflow.activity" id="act_confirm">
+            <field name="wkf_id" ref="wkf_holidays_timebank" />
+            <field name="name">confirm</field>
+            <field name="kind">function</field>
+            <field name="action">holidays_confirm()</field>
+            <field name="split_mode">OR</field>
+        </record>
+
+        <record model="workflow.activity" id="act_validate">
+            <field name="wkf_id" ref="wkf_holidays_timebank" />
+            <field name="name">validate</field>
+            <field name="kind">function</field>
+            <field name="action">holidays_validate()</field>
+        </record>
+
+        <record model="workflow.activity" id="act_validate1">
+            <field name="wkf_id" ref="wkf_holidays_timebank" />
+            <field name="name">second_validate</field>
+            <field name="kind">function</field>
+            <field name="action">holidays_validate2()</field>
+        </record>
+
+
+        <record model="workflow.activity" id="act_refuse">
+            <field name="wkf_id" ref="wkf_holidays_timebank" />
+            <field name="name">refuse</field>
+            <field name="flow_stop">True</field>
+            <field name="kind">stopall</field>
+        </record>
+
+        <!-- workflow transition -->
+
+        <record model="workflow.transition" id="t1">
+            <field name="act_from" ref="act_draft" />
+            <field name="act_to" ref="act_confirm" />
+            <field name="signal">confirm</field>
+        </record>
+
+        <record model="workflow.transition" id="t2">
+            <field name="act_from" ref="act_confirm" />
+            <field name="act_to" ref="act_validate" />
+            <field name="signal">validate</field>
+            <field name="condition">True</field>
+            <field name="group_id" ref="base.group_hr_user"/>
+        </record>
+
+        <record model="workflow.transition" id="t3">
+            <field name="act_from" ref="act_confirm" />
+            <field name="act_to" ref="act_refuse" />
+            <field name="signal">refuse</field>
+            <field name="condition">holidays_refuse('first_approval')</field>
+            <field name="group_id" ref="base.group_hr_user"/>
+        </record>
+
+        <record model="workflow.transition" id="t4">
+            <field name="act_from" ref="act_validate" />
+            <field name="act_to" ref="act_refuse" />
+            <field name="signal">refuse</field>
+            <field name="condition">holidays_refuse('second_approval')</field>
+            <field name="group_id" ref="base.group_hr_user"/>
+        </record>
+
+        <record model="workflow.transition" id="t8">
+            <field name="act_from" ref="act_validate" />
+            <field name="act_to" ref="act_validate1" />
+            <field name="signal">second_validate</field>
+            <field name="group_id" ref="base.group_hr_manager" />
+        </record>
+
+        <record model="workflow.transition" id="t11">
+            <field name="act_from" ref="act_validate" />
+            <field name="act_to" ref="act_validate1" />
+            <field name="condition">not holiday_status_id.double_validation</field>
+            <field name="signal" eval="False"/>
+        </record>
+
+
+    </data>
+</openerp>
